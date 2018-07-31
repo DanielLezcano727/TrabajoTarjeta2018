@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/DanielLezcano727/TrabajoTarjeta2018.svg?branch=master)](https://travis-ci.org/DanielLezcano727/TrabajoTarjeta2018)
+
+Daniel Lezcano - Micaela Siles
+
 # Trabajo Tarjeta: Versión 2018
 
 El siguiente trabajo es un enunciado iterativo. Todas las semanas nuevos
