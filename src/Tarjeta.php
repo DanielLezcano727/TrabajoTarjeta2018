@@ -6,12 +6,27 @@ class Tarjeta implements TarjetaInterface {
     protected $saldo;
 
     public function recargar($monto) {
-      // Esto esta hecho mal a proposito.
-      if ($monto % 2 == 0) {
-        $this->saldo += $monto;
+      
+      $carga = true;
+
+      switch($monto){
+        case 10:
+        case 20:
+        case 30:
+        case 50:
+        case 100:
+          $this->saldo+=$monto;
+          break;
+        case 510.15:
+          $this->saldo+=$monto + 81.93;
+        case 962.59:
+          $this->saldo+=$monto + 221.58;        
+          break;
+        default:
+          $carga = false;
       }
 
-      return $monto % 2 == 0;
+      return $carga;
     }
 
     /**
