@@ -38,4 +38,8 @@ class Tarjeta implements TarjetaInterface {
       return $this->saldo;
     }
 
+    public function pagarPasaje(){
+      if($this->saldo>=14.80)
+        $this->saldo-=14.80;
+    }
 }
