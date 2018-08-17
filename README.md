@@ -55,4 +55,38 @@ Para correr los tests:
 
 ## Iteracion 2. (14 de Agosto al 28 de Agosto)
 
-... Próximamente :)
+Iteracion 2. (14 de Agosto al 28 de Agosto)
+Para esta iteración hay 3 tareas principales. Crear un issue en github 
+copiando la descripción de cada tarea y completar cada uno en una rama 
+diferente. Éstas serán mergeadas al validar, luego de una revisión 
+cruzada (de ambos integrantes del grupo), que todo el código tiene 
+sentido y está correctamente implementado.
+
+No es necesario que todo el código para un issue esté funcionando al 
+100% antes de mergiarlo, pueden crear pull requests que solucionen algún 
+item particular del problema para avanzar más rápido.
+
+Además de las tareas planteadas, cada grupo tiene tareas pendientes de 
+la iteración anterior que debe finalizar antes de comenzar con la 
+iteración 2. Cuando la iteración 1 este completada, crear un tag llamado 
+iteracion1: Y subirlo a github
+
+IMPORTANTE: Como punto de control, alguna de estas dos funcionalidades: 
+"Viaje plus" o "Franquicia de Boleto" tiene que estar lista para revisar 
+a mitad de la iteración. (21 de Agosto).
+
+Descuento de saldos.
+Cada vez que una tarjeta paga un boleto, descuenta el valor del monto 
+gastado.
+Si la tarjeta se queda sin saldo, la operación 
+$colectivo->pagarCon($tarjeta) devuelve FALSE,
+Escribir un test que valide dos casos, pagar con saldo y pagar sin 
+saldo.
+Viaje plus
+Si la tarjeta se queda sin crédito, puede otorgar hasta dos viajes plus.
+Cuando se vuelve a cargar la tarjeta, se descuenta el saldo de lo que se 
+haya consumido en concepto de viaje plus.
+Escribir un test que valide que se pueden dar hasta dos viajes plus.
+Escribir un test que valide que el saldo de la tarjeta descuenta 
+correctamente el/los viaje/s plus otorgado/s.
+Franquicia de Boleto.
