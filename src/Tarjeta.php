@@ -19,6 +19,7 @@ class Tarjeta implements TarjetaInterface {
           break;
         case 510.15:
           $this->saldo+=$monto + 81.93;
+          break;
         case 962.59:
           $this->saldo+=$monto + 221.58;        
           break;
