@@ -50,18 +50,6 @@ class TarjetaTest extends TestCase {
       $this->assertEquals($tarjeta->obtenerSaldo(), 0);
   }
 
-//   public function testPagoSinSaldo(){
-//     $tarjeta = new Tarjeta();
-//     $tarjeta->pagarPasaje();
-    
-//     $this->assertFalse($tarjeta->pagarPasaje());
-
-//     $tarjeta->recargar(10);
-
-//     $this->assertFalse($tarjeta->pagarPasaje());
-    
-//     }
-
     public function testPagoConSaldo(){
         $tarjeta = new Tarjeta();
         $tarjeta->recargar(100);
