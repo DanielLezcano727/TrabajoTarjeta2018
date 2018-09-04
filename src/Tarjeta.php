@@ -6,13 +6,14 @@ class Tarjeta implements TarjetaInterface {
     protected $saldo;
     protected $precio;
     protected $cantPlus;
-    protected static $ID = 0;
+    protected $id;
     public function __construct (){
+      static $ID = 0;
+      $ID++;
       $this->saldo = 0;
       $this->precio = 14.80;
       $this->cantPlus = 0;
-      $this->id = Tarjeta::$ID;
-      Tarjeta::$ID++;
+      $this->id = $ID;
     }
 
     public function recargar($monto) {
@@ -70,7 +71,7 @@ class Tarjeta implements TarjetaInterface {
     }    
     
     public function obtenerID(){
-      return $this->cantPlus;
+      return $this->id;
     }
 
     public function pagarPasaje(){
