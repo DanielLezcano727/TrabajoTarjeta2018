@@ -14,7 +14,7 @@ class Boleto implements BoletoInterface {
     protected $saldo;
     protected $id;
 
-    public function __construct($valor, $colectivo, $tarjeta) {
+    public function __construct($valor, $colectivo, $tarjeta, TiempoInterface $tiempo) {
         $this->valor = $valor;
         $this->colectivo = $colectivo;
         $this->tarjeta = $tarjeta;
@@ -38,6 +38,8 @@ class Boleto implements BoletoInterface {
         $this->saldo = $tarjeta->obtenerSaldo();
 
         $this->id = $tarjeta->obtenerID();
+
+        $this->fecha = $tiempo->time();
     }
 
     /**
