@@ -13,6 +13,7 @@ class Boleto implements BoletoInterface {
     protected $total;
     protected $saldo;
     protected $id;
+    protected $descripcion;
 
     public function __construct($valor, $colectivo, $tarjeta, TiempoInterface $tiempo) {
         $this->valor = $valor;
@@ -31,6 +32,29 @@ class Boleto implements BoletoInterface {
             break;
         }
 
+        switch($tarjeta->obtenerCantPlus ){
+        case 1:
+            $this->descripcion = "$0 Viaje Plus";
+            break;
+        case 2:
+            $this->descripcion = "$0 Ultimo Plus";
+            break;
+        case 0:
+            switch($tarjeta->obtenerPlusAbonados){
+            case 1:
+                $this->descripcion = "$" . ($valor + 14.8) . " Abona un Viaje Plus";
+
+                break;
+            case 2:
+                $this->descripcion = "$" . ($valor + 14.8 * 2) . " Abona dos Viajes Plus";
+                break;
+            case 0:
+                $this->descripcion = "$" . $valor;
+                break;
+            }
+            break;
+        }
+
         $this->linea = $colectivo->linea();
 
         $this->total = $tarjeta->obtenerPrecio() + $tarjeta->obtenerCantPlus() * $tarjeta->obtenerPrecio();
@@ -39,7 +63,7 @@ class Boleto implements BoletoInterface {
 
         $this->id = $tarjeta->obtenerID();
 
-        $this->fecha = $tiempo->time();
+        $this->fecha = date("d/m/Y H:i:s",$tiempo->time());
     }
 
     /**
@@ -82,6 +106,10 @@ class Boleto implements BoletoInterface {
 
     public function obtenerID(){
         return $this->id;
+    }
+
+    public function obtenerDescripcion(){
+        return $this->descripcion;
     }
 
     

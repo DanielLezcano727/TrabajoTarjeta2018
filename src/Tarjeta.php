@@ -7,6 +7,7 @@ class Tarjeta implements TarjetaInterface {
     protected $precio;
     protected $cantPlus;
     protected $id;
+    protected $plusAbonados;
     public function __construct (){
       static $ID = 0;
       $ID++;
@@ -14,6 +15,7 @@ class Tarjeta implements TarjetaInterface {
       $this->precio = 14.80;
       $this->cantPlus = 0;
       $this->id = $ID;
+      $this->plusAbonados = 0;
     }
 
     public function recargar($monto) {
@@ -39,13 +41,12 @@ class Tarjeta implements TarjetaInterface {
           $carga = false;
       }
 
-      if($carga && $this->cantPlus == 0){
-        if($saldoAux < -$this->precio){
-          $this->cantPlus = 2;
-        }elseif($saldoAux < 0){
-          $this->cantPlus = 1;
-        }else{
+      if($carga && $this->cantPlus != 0){
+        $this->plusAbonados = $this->cantPlus;
+        if($this->saldo > 0){
           $this->cantPlus = 0;
+        }elseif ($this->saldo >= -$this->precio) {
+          $this->cantPlus = 1;
         }
       }
 
@@ -74,9 +75,20 @@ class Tarjeta implements TarjetaInterface {
       return $this->id;
     }
 
+    public function reestablecerPlus(){
+      $this->plusAbonados = 0;
+    }
+
+    public function obtenerPlusAbonados(){
+      return $this->plusAbonados;
+    }
+
     public function pagarPasaje(){
       if($this->saldo >= (-$this->precio)){
         $this->saldo -= $this->precio;
+        if($this->saldo < 0){
+          $this->cantPlus++;
+        }
         return true;
       }
       
