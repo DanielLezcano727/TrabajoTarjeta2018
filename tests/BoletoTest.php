@@ -39,8 +39,32 @@ class BoletoTest extends TestCase {
     }
 
     public function testPrecio(){
+        $tarjeta = new Tarjeta();
+        $colectivo = new Colectivo(null, "", null);
+        $tiempo = new TiempoFalso();
+        $tarjeta->pagarPasaje();
+        $tarjeta->pagarPasaje();
+        $tarjeta->recargar(50);
+        $tarjeta->recargar(10);
+        $boleto = new Boleto(14.8,$colectivo,$tarjeta,$tiempo);
+        $this->assertEquals($boleto->obtenerTotalAbonado(),14.8*3);
+        $tarjeta->pagarPasaje();
+        $boleto = new Boleto(14.8,$colectivo,$tarjeta,$tiempo);
+        $this->assertEquals($boleto->obtenerTotalAbonado(),14.8);
+        $tarjeta->pagarPasaje();
+        $tarjeta->pagarPasaje();
+        $tarjeta->recargar(50);
+        $boleto = new Boleto(14.8,$colectivo,$tarjeta,$tiempo);        
+        $this->assertEquals($boleto->obtenerTotalAbonado(),29.6);
         
+        $tarjeta = new MedioBoleto();
+        $boleto = new Boleto(7.4,$colectivo,$tarjeta,$tiempo);
+        $this->assertEquals($boleto->obtenerTotalAbonado(),7.4);
+        $tarjeta->pagarPasaje();
+        $boleto = new Boleto(7.4,$colectivo,$tarjeta,$tiempo);
+        $this->assertEquals($boleto->obtenerTotalAbonado(),7.4);
+        $tarjeta->recargar(50);
+        $boleto = new Boleto(7.4,$colectivo,$tarjeta,$tiempo);
+        $this->assertEquals($boleto->obtenerTotalAbonado(),14.8);
     }
-
-    
 }
