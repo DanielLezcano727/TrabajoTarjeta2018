@@ -32,7 +32,7 @@ class Boleto implements BoletoInterface {
             break;
         }
 
-        switch($tarjeta->obtenerCantPlus ){
+        switch($tarjeta->obtenerCantPlus() ){
         case 1:
             $this->descripcion = "$0 Viaje Plus";
             break;
@@ -40,7 +40,7 @@ class Boleto implements BoletoInterface {
             $this->descripcion = "$0 Ultimo Plus";
             break;
         case 0:
-            switch($tarjeta->obtenerPlusAbonados){
+            switch($tarjeta->obtenerPlusAbonados()){
             case 1:
                 $this->descripcion = "$" . ($valor + 14.8) . " Abona un Viaje Plus";
 
@@ -57,7 +57,7 @@ class Boleto implements BoletoInterface {
 
         $this->linea = $colectivo->linea();
 
-        $this->total = $tarjeta->obtenerPrecio() + $tarjeta->obtenerCantPlus() * $tarjeta->obtenerPrecio();
+        $this->total = $tarjeta->obtenerPrecio() + $tarjeta->obtenerPlusAbonados() * $tarjeta->obtenerPrecio();
 
         $this->saldo = $tarjeta->obtenerSaldo();
 
