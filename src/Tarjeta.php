@@ -5,16 +5,24 @@ namespace TrabajoTarjeta;
 class Tarjeta implements TarjetaInterface {
     protected $saldo;
     protected $precio;
-
+    protected $cantPlus;
+    protected $id;
+    protected $plusAbonados;
     public function __construct (){
+      static $ID = 0;
+      $ID++;
       $this->saldo = 0;
       $this->precio = 14.80;
+      $this->cantPlus = 0;
+      $this->id = $ID;
+      $this->plusAbonados = 0;
     }
 
     public function recargar($monto) {
       
       $carga = true;
-
+      
+      $saldoAux = $this->saldo;
       switch($monto){
         case 10:
         case 20:
@@ -33,6 +41,15 @@ class Tarjeta implements TarjetaInterface {
           $carga = false;
       }
 
+      if($carga && $this->cantPlus != 0){
+        $this->plusAbonados = $this->cantPlus;
+        if($this->saldo > 0){
+          $this->cantPlus = 0;
+        }elseif ($this->saldo >= -$this->precio) {
+          $this->cantPlus = 1;
+        }
+      }
+
 
       return $carga;
     }
@@ -45,10 +62,33 @@ class Tarjeta implements TarjetaInterface {
     public function obtenerSaldo() {
       return $this->saldo;
     }
+    
+    public function obtenerPrecio() {
+      return $this->precio;
+    }
+
+    public function obtenerCantPlus(){
+      return $this->cantPlus;
+    }    
+    
+    public function obtenerID(){
+      return $this->id;
+    }
+
+    public function reestablecerPlus(){
+      $this->plusAbonados = 0;
+    }
+
+    public function obtenerPlusAbonados(){
+      return $this->plusAbonados;
+    }
 
     public function pagarPasaje(){
       if($this->saldo >= (-$this->precio)){
         $this->saldo -= $this->precio;
+        if($this->saldo < 0){
+          $this->cantPlus++;
+        }
         return true;
       }
       
