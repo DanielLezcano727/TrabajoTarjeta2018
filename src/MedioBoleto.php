@@ -6,7 +6,8 @@ class MedioBoleto extends Tarjeta {
     protected $tipo;
     protected $tiempo;
     protected $tiempoAux;
-    protected $cantPorDia;
+    protected $usos;
+    
 
     public function __construct($tipo = 1, TiempoInterface $tiempo){
         parent::__construct();
@@ -22,25 +23,26 @@ class MedioBoleto extends Tarjeta {
         }
         $this->tiempo = $tiempo;
         $this->tiempoAux = 0;
-        $this->cantPorDia = 0;
+        
     }
     
-    static protected $usos;
 
     public function pagarPasaje(){
 
-        static $aumento = true;
+            static $aumento = true;
 
-        if(($tiempo - $tiempoAux ) % 86400 == 0 && $tiempo != $tiempoAux){
+        if(($this->tiempo->time() - $this->tiempoAux ) % 86400 == 0 && $this->tiempo->time() != $this->tiempoAux){
             $aumento = true;
             $this->usos = 0;
         }
 
         if(($this->tipo == "Universitario" && $this->usos != 2) || $this->tipo == "Secundario"){
-            if($this->tiempoAux - $this->tiempo){
+            if($this->tiempoAux - $this->tiempo->time() > 300){
                 $x = parent::pagarPasaje();
                 $this->tiempoAux = $this->tiempo->time();
-                $this->cantPorDia++;
+                if($this->tipo == "Universitario"){
+                    $this->usos++;
+                }
             }else{
                 $this->precio *= 2;
                 $x = parent::pagarPasaje();
@@ -50,12 +52,12 @@ class MedioBoleto extends Tarjeta {
             return $x;
 
         }else{
-            
             if($aumento){
                 $this->precio *= 2;
                 $aumento = false;
             }
-
+            return parent::pagarPasaje();
+            
         }
     
     }

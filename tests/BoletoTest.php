@@ -57,7 +57,7 @@ class BoletoTest extends TestCase {
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);        
         $this->assertEquals($boleto->obtenerTotalAbonado(),29.6);
         
-        $tarjeta = new MedioBoleto();
+        $tarjeta = new MedioBoleto(0,new Tiempo());
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
         $this->assertEquals($boleto->obtenerTotalAbonado(),7.4);
         $tarjeta->pagarPasaje();
