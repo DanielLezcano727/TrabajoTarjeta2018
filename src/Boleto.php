@@ -4,7 +4,6 @@ namespace TrabajoTarjeta;
 
 class Boleto implements BoletoInterface {
 
-    protected $valor;
     protected $colectivo;
     protected $tarjeta;
     protected $fecha;
@@ -15,12 +14,11 @@ class Boleto implements BoletoInterface {
     protected $id;
     protected $descripcion;
 
-    public function __construct($valor, $colectivo, $tarjeta, TiempoInterface $tiempo) {
-        $this->valor = $valor;
+    public function __construct($colectivo, $tarjeta, TiempoInterface $tiempo) {
         $this->colectivo = $colectivo;
         $this->tarjeta = $tarjeta;
 
-        switch($valor){
+        switch($tarjeta->obtenerPrecio()){
         case 14.80:
             $this->tipo = "Normal";
             break;
@@ -53,15 +51,15 @@ class Boleto implements BoletoInterface {
         case 0:
             switch($tarjeta->obtenerPlusAbonados()){
             case 1:
-                $this->descripcion = "$" . ($valor + 14.8) . " Abona un Viaje Plus";
+                $this->descripcion = "$" . ($tarjeta->obtenerPrecio() + 14.8) . " Abona un Viaje Plus";
                 $tarjeta->reestablecerPlus();
                 break;
             case 2:
-                $this->descripcion = "$" . ($valor + 14.8 * 2) . " Abona dos Viajes Plus";
+                $this->descripcion = "$" . ($tarjeta->obtenerPrecio() + 14.8 * 2) . " Abona dos Viajes Plus";
                 $tarjeta->reestablecerPlus();
                 break;
             case 0:
-                $this->descripcion = "$" . $valor;
+                $this->descripcion = "$" . $tarjeta->obtenerPrecio();
                 break;
             }
             break;
@@ -69,12 +67,12 @@ class Boleto implements BoletoInterface {
     }
     
     /**
-     * Devuelve el valor del boleto.
+     * Devuelve el tarjeta->obtenerPrecio() del boleto.
      *
      * @return int
      */
     public function obtenerValor() {
-        return $this->valor;
+        return $this->tarjeta->obtenerPrecio();
     }
 
     /**
