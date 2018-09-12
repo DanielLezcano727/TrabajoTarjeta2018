@@ -30,7 +30,7 @@ class MedioBoleto extends Tarjeta {
     }
     
     protected function pasaron5Minutos(){
-        return $this->tiempo->time() - $this->tiempoAux > 300;
+        return ($this->tiempo->time() - $this->tiempoAux )> 300;
     }
 
     protected function pasajeNormal(){
@@ -39,9 +39,9 @@ class MedioBoleto extends Tarjeta {
         $this->precio /= 2;
         return $aux;
     }
-
+    
     public function avanzarTiempo($segundos){
-        if(is_a($this->tiempo, "TiempoFalso")){
+        if($this->tiempo instanceof TiempoFalso){
             $this->tiempo->avanzar($segundos);
             return true;
         }
