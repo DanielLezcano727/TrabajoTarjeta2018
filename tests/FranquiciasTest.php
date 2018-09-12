@@ -67,4 +67,21 @@ class FranquiciasTest extends TestCase {
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertEquals($tarjeta->obtenerSaldo(),63);
     }
+
+    public function testLimitacionUniversitario(){
+        $tarjeta = new MedioBoleto(new TiempoFalso(900),0);
+        $tarjeta->recargar(100);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),92.6);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),77.8);
+        $tarjeta->avanzarTiempo(900);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),70.4);
+        $tarjeta->avanzarTiempo(900);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),55.6);
+        
+        
+    }
 }

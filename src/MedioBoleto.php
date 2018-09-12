@@ -30,7 +30,7 @@ class MedioBoleto extends Tarjeta {
     }
     
     protected function pasaron5Minutos(){
-        return ($this->tiempo->time() - $this->tiempoAux )> 300;
+        return ($this->tiempo->time() - $this->tiempoAux) > 300;
     }
 
     protected function pasajeNormal(){
