@@ -56,4 +56,15 @@ class FranquiciasTest extends TestCase {
         
         
     }
+
+    public function testViajePlus(){
+        $tarjeta = new MedioBoleto(new TiempoFalso(900));
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),-14.8);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),-29.6);
+        $tarjeta->recargar(100);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),63);
+    }
 }
