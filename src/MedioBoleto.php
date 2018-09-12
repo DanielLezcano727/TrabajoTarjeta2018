@@ -3,62 +3,60 @@
 namespace TrabajoTarjeta;
 
 class MedioBoleto extends Tarjeta {
+
     protected $tipo;
     protected $tiempo;
     protected $tiempoAux;
     protected $usos;
     
 
-    public function __construct($tipo = 1, TiempoInterface $tiempo){
+    public function __construct(TiempoInterface $tiempo, $tipo = 1){
         parent::__construct();
         $this->precio /= 2;
+
         switch($tipo){
         case 0:
-            $this->tipo = "Universitario";
+            $this->tipo = "Medio Boleto Universitario";
             break;
-        case 1:
         default:
-            $this->tipo = "Secundario";
+            $this->tipo = "Medio Boleto Secundario";
             break;
         }
+
         $this->tiempo = $tiempo;
+
         $this->tiempoAux = 0;
         
     }
     
+    protected function pasaron5Minutos(){
+        return $this->tiempo->time() - $this->tiempoAux > 300;
+    }
 
+    protected function pasajeNormal(){
+        $this->precio *= 2;
+        $aux = parent::pagarPasaje();
+        $this->precio /= 2;
+        return $aux;
+    }
+
+    public function avanzarTiempo($segundos){
+        if(is_a($this->tiempo, "TiempoFalso")){
+            $this->tiempo->avanzar($segundos);
+            return true;
+        }
+        return false;
+    }
+    
     public function pagarPasaje(){
 
-            static $aumento = true;
-
-        if(($this->tiempo->time() - $this->tiempoAux ) % 86400 == 0 && $this->tiempo->time() != $this->tiempoAux){
-            $aumento = true;
-            $this->usos = 0;
-        }
-
-        if(($this->tipo == "Universitario" && $this->usos != 2) || $this->tipo == "Secundario"){
-            if($this->tiempoAux - $this->tiempo->time() > 300){
-                $x = parent::pagarPasaje();
-                $this->tiempoAux = $this->tiempo->time();
-                if($this->tipo == "Universitario"){
-                    $this->usos++;
-                }
-            }else{
-                $this->precio *= 2;
-                $x = parent::pagarPasaje();
-                $this->precio /= 2;
-                
-            }
-            return $x;
-
-        }else{
-            if($aumento){
-                $this->precio *= 2;
-                $aumento = false;
-            }
+        if($this->pasaron5Minutos()){
+            $this->tiempoAux = $this->tiempo->time();
             return parent::pagarPasaje();
-            
+        }else{
+            return $this->pasajeNormal();
         }
-    
+
     }
+        
 }
