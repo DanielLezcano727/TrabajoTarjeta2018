@@ -25,8 +25,7 @@ class FranquiciasTest extends TestCase {
 
     public function testFranquiciaCompleta(){
 
-        $tarjeta = new MedioBoleto(new Tiempo());
-        $tarjeta->recargar(100);
+        $tarjeta = new FranquiciaCompleta();
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertTrue($tarjeta->pagarPasaje());
@@ -81,7 +80,27 @@ class FranquiciasTest extends TestCase {
         $tarjeta->avanzarTiempo(900);
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertEquals($tarjeta->obtenerSaldo(),55.6);
+        $tarjeta->avanzarTiempo(86000);
+        $this->assertTrue($tarjeta->pagarPasaje());
+        $this->assertEquals($tarjeta->obtenerSaldo(),48.2);
         
         
+    }
+
+    public function testTiempoReal(){
+        $tarjeta = new MedioBoleto(new Tiempo());
+        $this->assertFalse($tarjeta->avanzarTiempo(200));
+        $this->assertFalse($tarjeta->avanzarTiempo("200"));
+        $this->assertFalse($tarjeta->avanzarTiempo(12));
+        $this->assertFalse($tarjeta->avanzarTiempo(-200));
+    }
+
+    public function testTipoTarjeta(){
+        $secundario = new MedioBoleto(new Tiempo());
+        $universitario = new MedioBoleto(new Tiempo(),0);
+        $this->assertEquals($secundario->tipoTarjeta(),"Medio Boleto Secundario");
+        $this->assertEquals($universitario->tipoTarjeta(),"Medio Boleto Universitario");
+        $this->assertNotEquals($secundario->tipoTarjeta(),"Medio Boleto Universitario");
+        $this->assertNotEquals($universitario->tipoTarjeta(),"Medio Boleto Secundario");
     }
 }

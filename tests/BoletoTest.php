@@ -67,5 +67,20 @@ class BoletoTest extends TestCase {
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
         $this->assertEquals($boleto->obtenerTotalAbonado(),14.8);
     }
+
+    public function testDescripcion(){
+        $tarjeta = new FranquiciaCompleta();
+        $colectivo = new Colectivo(null, "", null);
+        $boleto = new Boleto($colectivo, $tarjeta, new Tiempo());
+        $this->assertEquals($boleto->obtenerDescripcion(), "$0");
+        $this->assertEquals($boleto->obtenerTipo(),"Franquicia completa");
+
+        $tarjeta = new Tarjeta();
+        $tarjeta->pagarPasaje();
+        $tarjeta->pagarPasaje();
+        $boleto = new Boleto($colectivo,$tarjeta, new Tiempo());
+        
+        $this->assertEquals($boleto->obtenerDescripcion(),"$0 Ultimo Plus");
+    }
 }
 
