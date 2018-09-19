@@ -127,10 +127,13 @@ class Tarjeta implements TarjetaInterface {
       $limitacionHora = 60;
       switch($this->dia()){
         case "Saturday":
+          if($this->hora() < 14){
+            break;
+          }
         case "Sunday":
           $limitacionHora = 90;
       }
-      if($this->hora() > 22 || $this->hora() < 6){
+      if($this->hora() >= 22 || $this->hora() <= 6){
         $limitacionHora = 90;
       }
       if($this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3){

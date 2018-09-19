@@ -106,6 +106,30 @@ class TarjetaTest extends TestCase {
         $tarjeta->pagarPasaje();
         $tarjeta->reestablecerPrecio();
         $this->assertEquals($tarjeta->obtenerSaldo(),45.74);
+    }
+
+    public function testLimitacionSabado(){
+        $tarjeta = new Tarjeta(new TiempoFalso(55*3600));
+        $tarjeta->recargar(100);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $tarjeta->avanzarTiempo(3660);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();        
+        $this->assertEquals($tarjeta->obtenerSaldo(),70.4);
+        $tarjeta->avanzarTiempo(3000);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),65.47);
+        $tarjeta->avanzarTiempo(3600 * 7);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),50.67);
+        $tarjeta->avanzarTiempo(60*80);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),45.74);
+        
         
 
     }
