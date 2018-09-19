@@ -14,6 +14,7 @@ class BoletoTest extends TestCase {
         $this->assertEquals($boleto1->obtenerTipo(),"Normal");
         $this->assertEquals($boleto1->obtenerLinea(),"143 Rojo");
         $this->assertEquals($boleto1->obtenerTotalAbonado(),14.8);
+        $this->assertEquals($boleto1->obtenerValor(),14.8);
         $this->assertEquals($boleto1->obtenerSaldo(),0);
         $this->assertEquals($boleto1->obtenerID(),1);
     }
