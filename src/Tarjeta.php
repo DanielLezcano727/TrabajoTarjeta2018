@@ -10,10 +10,9 @@ class Tarjeta implements TarjetaInterface {
     protected $plusAbonados;
     protected $tiempo;
     protected $dia;
-    public $minutos;
+    protected $minutos;
     protected $precioOriginal;
     protected $contarTrasbordos;
-    protected $hora;
 
     public function __construct (TiempoInterface $tiempo){
       static $ID = 0;
@@ -131,6 +130,9 @@ class Tarjeta implements TarjetaInterface {
         case "Sunday":
           $limitacionHora = 90;
       }
+      if($this->hora() > 22 || $this->hora() < 6){
+        $limitacionHora = 90;
+      }
       if($this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3){
         $this->precio /= 3;
       }
@@ -144,7 +146,11 @@ class Tarjeta implements TarjetaInterface {
       return date("l",$this->tiempo->time());
     }
 
-    public function horaEnMinutos(){
+    protected function horaEnMinutos(){
       return $this->tiempo->time() / 60;
+    }
+
+    protected function hora(){
+      return (int) date("H", $this->tiempo->time());
     }
 }

@@ -85,17 +85,28 @@ class TarjetaTest extends TestCase {
     }
 
     public function testTrasbordo(){
-        $tarjeta = new Tarjeta(new TiempoFalso());
+        $tarjeta = new Tarjeta(new TiempoFalso()); //Se crea el 1 de enero de 1970: Jueves 00:00hs
         $tarjeta->recargar(100);
         $tarjeta->pagarPasaje();
         $tarjeta->reestablecerPrecio();
         $this->assertEquals($tarjeta->obtenerSaldo(),85.2);
+        $tarjeta->avanzarTiempo(5000);
         $tarjeta->pagarPasaje();
         $tarjeta->reestablecerPrecio();
         $this->assertEquals($tarjeta->obtenerSaldo(),80.27);
-        $tarjeta->avanzarTiempo(26000);
+        $tarjeta->avanzarTiempo(21200);
         $tarjeta->pagarPasaje();
         $tarjeta->reestablecerPrecio();
         $this->assertEquals($tarjeta->obtenerSaldo(),65.47);
+        $tarjeta->avanzarTiempo(4000);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),50.67);
+        $tarjeta->avanzarTiempo(3000);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),45.74);
+        
+
     }
 }
