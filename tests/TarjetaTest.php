@@ -129,8 +129,19 @@ class TarjetaTest extends TestCase {
         $tarjeta->pagarPasaje();
         $tarjeta->reestablecerPrecio();
         $this->assertEquals($tarjeta->obtenerSaldo(),45.74);
-        
-        
+    }
 
+    public function testLinea(){
+        $tarjeta = new MedioBoleto(new TiempoFalso());
+        $tarjeta->recargar(100);
+        $colectivo = new Colectivo(143,"143 Rojo", "Semtur");
+        $colectivo2 = new Colectivo(133,"133 Negro", "Otra");
+        $colectivo->pagarCon($tarjeta);
+        $tarjeta->avanzarTiempo(800);
+        $colectivo->pagarCon($tarjeta);
+        $this->assertEquals($tarjeta->obtenerSaldo(),85.2);
+        $tarjeta->avanzarTiempo(800);
+        $boleto = $colectivo2->pagarCon($tarjeta);
+        $this->assertEquals($tarjeta->obtenerSaldo(),82.73);
     }
 }
