@@ -11,13 +11,13 @@ class FranquiciasTest extends TestCase {
         $tarjeta->recargar(100);
         $tarjeta->pagarPasaje();
         $this->assertEquals($tarjeta->obtenerSaldo(),92.6);
-        $tarjeta->avanzarTiempo(900);
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
         $this->assertEquals($tarjeta->obtenerSaldo(),85.2);
-        $tarjeta->avanzarTiempo(900);
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
         $this->assertEquals($tarjeta->obtenerSaldo(),77.8);
-        $tarjeta->avanzarTiempo(900);
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
         $this->assertEquals($tarjeta->obtenerSaldo(),70.4);
         
@@ -25,7 +25,7 @@ class FranquiciasTest extends TestCase {
 
     public function testFranquiciaCompleta(){
 
-        $tarjeta = new FranquiciaCompleta();
+        $tarjeta = new FranquiciaCompleta(new Tiempo());
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertTrue($tarjeta->pagarPasaje());
@@ -34,6 +34,7 @@ class FranquiciasTest extends TestCase {
 
     public function testLimitacion5mins(){
         $tarjeta = new MedioBoleto(new TiempoFalso(700));
+        $tarjeta->noContarTrasbordos();
         $tarjeta->recargar(100);
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertEquals($tarjeta->obtenerSaldo(), 92.6);
@@ -58,6 +59,7 @@ class FranquiciasTest extends TestCase {
 
     public function testViajePlus(){
         $tarjeta = new MedioBoleto(new TiempoFalso(900));
+        $tarjeta->noContarTrasbordos();
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertEquals($tarjeta->obtenerSaldo(),-14.8);
         $this->assertTrue($tarjeta->pagarPasaje());
@@ -69,6 +71,7 @@ class FranquiciasTest extends TestCase {
 
     public function testLimitacionUniversitario(){
         $tarjeta = new MedioBoleto(new TiempoFalso(900),0);
+        $tarjeta->noContarTrasbordos();
         $tarjeta->recargar(100);
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertEquals($tarjeta->obtenerSaldo(),92.6);

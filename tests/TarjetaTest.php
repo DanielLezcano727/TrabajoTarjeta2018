@@ -10,7 +10,7 @@ class TarjetaTest extends TestCase {
      * Comprueba que la tarjeta aumenta su saldo cuando se carga saldo válido.
      */
     public function testCargaSaldo() {
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $this->assertTrue($tarjeta->recargar(10));
         $this->assertEquals($tarjeta->obtenerSaldo(), 10);
 
@@ -37,7 +37,7 @@ class TarjetaTest extends TestCase {
      * Comprueba que la tarjeta no puede cargar saldos invalidos.
      */
     public function testCargaSaldoInvalido() {
-      $tarjeta = new Tarjeta();
+      $tarjeta = new Tarjeta(new Tiempo());
       $this->assertFalse($tarjeta->recargar(15));
       $this->assertEquals($tarjeta->obtenerSaldo(), 0);
       $this->assertFalse($tarjeta->recargar(35));
@@ -51,7 +51,7 @@ class TarjetaTest extends TestCase {
   }
 
     public function testPagoConSaldo(){
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $tarjeta->recargar(100);
 
         $this->assertTrue($tarjeta->pagarPasaje());
@@ -60,7 +60,7 @@ class TarjetaTest extends TestCase {
     }
 
     public function testViajePlus(){
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
 
         $this->assertTrue($tarjeta->pagarPasaje());
         $this->assertEquals($tarjeta->obtenerSaldo(),-14.80);
@@ -78,7 +78,7 @@ class TarjetaTest extends TestCase {
     }
 
     public function testRecargaPlus(){
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new TiempoFalso());
         $tarjeta->pagarPasaje();
         $tarjeta->recargar(20);
         $this->assertEquals($tarjeta->obtenerSaldo(),5.2);

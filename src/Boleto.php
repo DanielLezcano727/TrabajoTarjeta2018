@@ -28,6 +28,17 @@ class Boleto implements BoletoInterface {
         case 0:
             $this->tipo = "Franquicia completa";
             break;
+        default:
+            switch($tarjeta->obtenerPrecio()){
+            case (14.8/3):
+                $this->tipo = "Trasbordo";
+                break;
+            case (7.4/3):
+                $this->tipo = "Medio Trasbordo";
+                break;
+            }
+            $tarjeta->reestablecerPrecio();
+            break;
         }
 
         
@@ -64,6 +75,8 @@ class Boleto implements BoletoInterface {
             }
             break;
         }
+
+        $tarjeta->reestablecerPrecio();
     }
     
     /**

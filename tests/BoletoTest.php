@@ -5,17 +5,9 @@ namespace TrabajoTarjeta;
 use PHPUnit\Framework\TestCase;
 
 class BoletoTest extends TestCase {
-
-    public function testSaldoCero() {
-        $valor = 14.80;
-        $colectivo = new Colectivo(null, null, null);
-        $boleto = new Boleto($colectivo, new Tarjeta(), new Tiempo());
-        
-        $this->assertEquals($boleto->obtenerValor(), $valor);
-    }
     
     public function testTipo(){
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $colectivo = new Colectivo(null, "143 Rojo", null);
         $boleto1 = new Boleto($colectivo,$tarjeta, new Tiempo());
         $this->assertEquals($boleto1->obtenerColectivo(),$colectivo);
@@ -23,11 +15,11 @@ class BoletoTest extends TestCase {
         $this->assertEquals($boleto1->obtenerLinea(),"143 Rojo");
         $this->assertEquals($boleto1->obtenerTotalAbonado(),14.8);
         $this->assertEquals($boleto1->obtenerSaldo(),0);
-        $this->assertEquals($boleto1->obtenerID(),2);
+        $this->assertEquals($boleto1->obtenerID(),1);
     }
 
     public function testFecha(){
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $colectivo = new Colectivo(null, "", null);
         $tiempo = new TiempoFalso();
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
@@ -39,7 +31,7 @@ class BoletoTest extends TestCase {
     }
 
     public function testPrecio(){
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new TiempoFalso());
         $colectivo = new Colectivo(null, "", null);
         $tiempo = new TiempoFalso();
         $tarjeta->pagarPasaje();
@@ -48,10 +40,13 @@ class BoletoTest extends TestCase {
         $tarjeta->recargar(10);
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
         $this->assertEquals($boleto->obtenerTotalAbonado(),14.8*3);
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
         $this->assertEquals($boleto->obtenerTotalAbonado(),14.8);
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
         $tarjeta->recargar(50);
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);        
@@ -60,6 +55,7 @@ class BoletoTest extends TestCase {
         $tarjeta = new MedioBoleto(new Tiempo(), 0);
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
         $this->assertEquals($boleto->obtenerTotalAbonado(),7.4);
+        $tarjeta->avanzarTiempo(5500);
         $tarjeta->pagarPasaje();
         $boleto = new Boleto($colectivo,$tarjeta,$tiempo);
         $this->assertEquals($boleto->obtenerTotalAbonado(),7.4);
@@ -69,13 +65,13 @@ class BoletoTest extends TestCase {
     }
 
     public function testDescripcion(){
-        $tarjeta = new FranquiciaCompleta();
+        $tarjeta = new FranquiciaCompleta(new Tiempo());
         $colectivo = new Colectivo(null, "", null);
         $boleto = new Boleto($colectivo, $tarjeta, new Tiempo());
         $this->assertEquals($boleto->obtenerDescripcion(), "$0");
         $this->assertEquals($boleto->obtenerTipo(),"Franquicia completa");
 
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $tarjeta->pagarPasaje();
         $tarjeta->pagarPasaje();
         $boleto = new Boleto($colectivo,$tarjeta, new Tiempo());
