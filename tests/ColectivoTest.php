@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 class ColectivoTest extends TestCase {
 
     public function testPagarCon() {
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $tarjeta->recargar(100);
         $colectivo = new Colectivo(null, null, null);
         $boleto = $colectivo->pagarCon($tarjeta);
         $this->assertNotFalse($boleto);
         $boleto = $colectivo->pagarCon($tarjeta);
         $this->assertNotFalse($boleto);
-        $tarjeta = new Tarjeta();
+        $tarjeta = new Tarjeta(new Tiempo());
         $tarjeta->pagarPasaje();
         $tarjeta->pagarPasaje();
         $this->assertFalse($colectivo->pagarCon($tarjeta));

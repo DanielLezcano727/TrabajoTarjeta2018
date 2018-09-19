@@ -8,7 +8,15 @@ class Tarjeta implements TarjetaInterface {
     protected $cantPlus;
     protected $id;
     protected $plusAbonados;
-    public function __construct (){
+    protected $tiempo;
+    protected $dia;
+    protected $minutos;
+    protected $precioOriginal;
+    protected $contarTrasbordos;
+    protected $linea;
+    protected $lineaAnterior;
+
+    public function __construct (TiempoInterface $tiempo){
       static $ID = 0;
       $ID++;
       $this->saldo = 0;
@@ -16,6 +24,10 @@ class Tarjeta implements TarjetaInterface {
       $this->cantPlus = 0;
       $this->id = $ID;
       $this->plusAbonados = 0;
+      $this->tiempo = $tiempo;
+      $this->minutos = -10000;
+      $this->contarTrasbordos = true;
+      $this->precioOriginal = $this->precio;
     }
 
     public function recargar($monto) {
@@ -50,10 +62,9 @@ class Tarjeta implements TarjetaInterface {
         }
       }
 
-
       return $carga;
     }
-
+    
     /**
      * Devuelve el saldo que le queda a la tarjeta.
      *
@@ -61,6 +72,10 @@ class Tarjeta implements TarjetaInterface {
      */
     public function obtenerSaldo() {
       return $this->saldo;
+    }
+
+    public function establecerLinea($linea){
+      $this->linea = $linea;
     }
     
     public function obtenerPrecio() {
@@ -83,16 +98,72 @@ class Tarjeta implements TarjetaInterface {
       return $this->plusAbonados;
     }
 
+    public function noContarTrasbordos(){
+      $this->contarTrasbordos = false;
+    }
+
     public function pagarPasaje(){
+      
+      $this->esTrasbordo();
+
       if($this->saldo >= (-$this->precio)){
-        $this->saldo -= $this->precio;
+        $this->saldo = (float)number_format($this->saldo - $this->precio,2);
         if($this->saldo < 0){
           $this->cantPlus++;
         }
+        $this->minutos = $this->horaEnMinutos();
+        $this->dia = $this->dia();
+        $this->hora = (int) date("H", $this->tiempo->time());
+        $this->lineaAnterior = $this->linea;
         return true;
       }
       
 
       return false;
+    }
+
+    public function avanzarTiempo($segundos){
+      if($this->tiempo instanceof TiempoFalso){
+          $this->tiempo->avanzar($segundos);
+          return true;
+      }
+      return false;
+    }
+
+    protected function esTrasbordo(){
+      if(isset($this->linea) && isset($this->lineaAnterior) && $this->lineaAnterior == $this->linea){
+        return;
+      }
+      $limitacionHora = 60;
+      switch($this->dia()){
+        case "Saturday":
+          if($this->hora() < 14){
+            break;
+          }
+        case "Sunday":
+          $limitacionHora = 90;
+      }
+      if($this->hora() >= 22 || $this->hora() <= 6){
+        $limitacionHora = 90;
+      }
+      if($this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3){
+        $this->precio /= 3;
+      }
+    }
+
+    public function reestablecerPrecio(){
+      $this->precio = $this->precioOriginal;
+    }
+
+    protected function dia(){
+      return date("l",$this->tiempo->time());
+    }
+
+    protected function horaEnMinutos(){
+      return $this->tiempo->time() / 60;
+    }
+
+    protected function hora(){
+      return (int) date("H", $this->tiempo->time());
     }
 }
