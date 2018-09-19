@@ -83,4 +83,19 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(20);
         $this->assertEquals($tarjeta->obtenerSaldo(),5.2);
     }
+
+    public function testTrasbordo(){
+        $tarjeta = new Tarjeta(new TiempoFalso());
+        $tarjeta->recargar(100);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),85.2);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),80.27);
+        $tarjeta->avanzarTiempo(26000);
+        $tarjeta->pagarPasaje();
+        $tarjeta->reestablecerPrecio();
+        $this->assertEquals($tarjeta->obtenerSaldo(),65.47);
+    }
 }

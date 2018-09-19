@@ -10,9 +10,10 @@ class Tarjeta implements TarjetaInterface {
     protected $plusAbonados;
     protected $tiempo;
     protected $dia;
-    protected $hora;
+    public $minutos;
     protected $precioOriginal;
     protected $contarTrasbordos;
+    protected $hora;
 
     public function __construct (TiempoInterface $tiempo){
       static $ID = 0;
@@ -23,7 +24,7 @@ class Tarjeta implements TarjetaInterface {
       $this->id = $ID;
       $this->plusAbonados = 0;
       $this->tiempo = $tiempo;
-      $this->hora = -10000;
+      $this->minutos = -10000;
       $this->contarTrasbordos = true;
       $this->precioOriginal = $this->precio;
     }
@@ -101,12 +102,13 @@ class Tarjeta implements TarjetaInterface {
       $this->esTrasbordo();
 
       if($this->saldo >= (-$this->precio)){
-        $this->saldo -= $this->precio;
+        $this->saldo = (float)number_format($this->saldo - $this->precio,2);
         if($this->saldo < 0){
           $this->cantPlus++;
         }
-        $this->hora = $this->horaEnMinutos();
+        $this->minutos = $this->horaEnMinutos();
         $this->dia = $this->dia();
+        $this->hora = (int) date("H", $this->tiempo->time());
         return true;
       }
       
@@ -123,7 +125,13 @@ class Tarjeta implements TarjetaInterface {
     }
 
     protected function esTrasbordo(){
-      if($this->contarTrasbordos && $this->horaEnMinutos() - $this->hora < 60 && $this->saldo >= $this->precio/3){
+      $limitacionHora = 60;
+      switch($this->dia()){
+        case "Saturday":
+        case "Sunday":
+          $limitacionHora = 90;
+      }
+      if($this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3){
         $this->precio /= 3;
       }
     }
@@ -132,15 +140,11 @@ class Tarjeta implements TarjetaInterface {
       $this->precio = $this->precioOriginal;
     }
 
-    protected function establecerTiempo(){
-      
-    }
-
     protected function dia(){
       return date("l",$this->tiempo->time());
     }
 
-    protected function horaEnMinutos(){
-      return (int) date("H",$this->tiempo->time()) * 60 + (int) date("i", $this->tiempo->time());
+    public function horaEnMinutos(){
+      return $this->tiempo->time() / 60;
     }
 }
