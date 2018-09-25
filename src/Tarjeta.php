@@ -15,6 +15,7 @@ class Tarjeta implements TarjetaInterface {
     protected $contarTrasbordos;
     protected $linea;
     protected $lineaAnterior;
+    protected $fueTrasbordo;
 
     public function __construct (TiempoInterface $tiempo){
       static $ID = 0;
@@ -28,6 +29,7 @@ class Tarjeta implements TarjetaInterface {
       $this->minutos = -10000;
       $this->contarTrasbordos = true;
       $this->precioOriginal = $this->precio;
+      $fueTrasbordo = false;
     }
 
     public function recargar($monto) {
@@ -131,6 +133,10 @@ class Tarjeta implements TarjetaInterface {
     }
 
     protected function esTrasbordo(){
+      if($this->fueTrasbordo){
+        $this->fueTrasbordo = false;
+        return;
+      }
       if(isset($this->linea) && isset($this->lineaAnterior) && $this->lineaAnterior == $this->linea){
         return;
       }
@@ -148,6 +154,7 @@ class Tarjeta implements TarjetaInterface {
       }
       if($this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3){
         $this->precio /= 3;
+       $this->fueTrasbordo = true;
       }
     }
 
