@@ -133,7 +133,7 @@ class Tarjeta implements TarjetaInterface {
     }
 
     protected function esTrasbordo(){
-      if($this->fueTrasbordo){
+      if($this->fueTrasbordo || $this->plusAbonados != 0){
         $this->fueTrasbordo = false;
         return;
       }
