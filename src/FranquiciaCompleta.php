@@ -9,7 +9,13 @@ class FranquiciaCompleta extends Tarjeta {
         $this->precio = 0;
     }
 
-
+    /**
+     * Sobreescribe el metodo pagarPasaje de 
+     * la clase padre para que siempre se pueda
+     * pagar un pasaje
+     * 
+     * @return true
+     */
     public function pagarPasaje(){
         return true;
     }

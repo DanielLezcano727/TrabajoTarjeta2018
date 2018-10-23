@@ -76,34 +76,73 @@ class Tarjeta implements TarjetaInterface {
       return $this->saldo;
     }
 
+    /**
+     * Iguala el atributo linea a la linea del colectivo
+     * 
+     * @param string $linea
+     */
     public function establecerLinea($linea){
       $this->linea = $linea;
     }
     
+    /**
+     * Devuelve el precio del pasaje que se va a abonar
+     * 
+     * @return int 
+     */
     public function obtenerPrecio() {
       return $this->precio;
     }
 
+    /**
+     * Devuelve la cantidad de plus que se van a abonar en el proximo pasaje
+     * 
+     * @return int
+     */
     public function obtenerCantPlus(){
       return $this->cantPlus;
     }    
     
+    /**
+     * Devuelve el identificador de la tarjeta
+     * 
+     * @return int
+     */
     public function obtenerID(){
       return $this->id;
     }
 
+    /**
+     * Indica que la cantidad de pasajes plus que se van a abonar es 0
+     */
     public function reestablecerPlus(){
       $this->plusAbonados = 0;
     }
 
+    /**
+     * Devuelve la cantidad de plus que se deben pagar en el proximo pasaje
+     * 
+     * @return int
+     */
     public function obtenerPlusAbonados(){
       return $this->plusAbonados;
     }
 
+    /**
+     * Desactiva la posibilidad de abonar un trasbordo
+     */
     public function noContarTrasbordos(){
       $this->contarTrasbordos = false;
     }
 
+    /**
+     * Verifica y en caso de ser posible efectua el pago de un pasaje,
+     *  descontando el precio del pasaje abonado y establece la fecha del pasaje. 
+     * En caso de no ser posible, devuelve false. En caso de ser necesario, abona un pasaje plus.
+     * Tambien verifica si el pasaje que se va a pagar es un trasbordo
+     * 
+     * @return bool
+     */
     public function pagarPasaje(){
       
       $this->esTrasbordo();
@@ -124,6 +163,13 @@ class Tarjeta implements TarjetaInterface {
       return false;
     }
 
+    /**
+     * Avanza el tiempo si este es de tipo TiempoFalso
+     * 
+     * @param int $segundos
+     * 
+     * @return bool
+     */
     public function avanzarTiempo($segundos){
       if($this->tiempo instanceof TiempoFalso){
           $this->tiempo->avanzar($segundos);
@@ -132,6 +178,9 @@ class Tarjeta implements TarjetaInterface {
       return false;
     }
 
+    /**
+     * Verifica si el pasaje a pagar es un trasbordo. Si es un trasbordo, cambia el precio del pasaje.
+     */
     protected function esTrasbordo(){
       if($this->fueTrasbordo || $this->plusAbonados != 0){
         $this->fueTrasbordo = false;
@@ -158,18 +207,36 @@ class Tarjeta implements TarjetaInterface {
       }
     }
 
+    /**
+     * Establece el precio al precio normal de un pasaje (14.8)
+     */
     public function reestablecerPrecio(){
       $this->precio = $this->precioOriginal;
     }
 
+    /**
+     * Devuelve el dia en el que se abona un pasaje
+     * 
+     * @return string
+     */
     protected function dia(){
       return date("l",$this->tiempo->time());
     }
 
+    /**
+     * Devuelve la hora del dia en minutos
+     * 
+     * @return int
+     */
     protected function horaEnMinutos(){
       return $this->tiempo->time() / 60;
     }
 
+    /**
+     * Devuelve la hora del dia en formato 24h
+     * 
+     * @return int
+     */
     protected function hora(){
       return (int) date("H", $this->tiempo->time());
     }

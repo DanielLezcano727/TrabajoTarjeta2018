@@ -97,30 +97,65 @@ class Boleto implements BoletoInterface {
         return $this->colectivo;
     }
 
+    /**
+     * Devuelve la fecha en la cual se pago el pasaje
+     * 
+     * @return string
+     */
     public function obtenerFecha() {
         return $this->fecha;
     }
     
+    /**
+     * Devuelve el tipo del pasaje (Medio Boleto, Franquicia completa, normal)
+     * 
+     * @return string
+     */
     public function obtenerTipo(){
         return $this->tipo;
     }
 
+    /**
+     * Devuelve la linea del colectivo en la que viajo el pasajero.
+     * 
+     * @return string
+     */
     public function obtenerLinea(){
         return $this->linea;
     }
 
+    /**
+     * Devuelve la cantidad de dinero total abonado con el pasaje
+     * 
+     * @return int
+     */
     public function obtenerTotalAbonado(){
         return $this->total;
     }
 
+    /**
+     * Devuelve el saldo restante de la tarjeta con la que se pago el pasaje
+     * 
+     * @return int
+     */
     public function obtenerSaldo(){
         return $this->saldo;
     }
 
+    /**
+     * Devuelve el id de la tarjeta con la que se abono el pasaje
+     * 
+     * @return int
+     */
     public function obtenerID(){
         return $this->id;
     }
 
+    /**
+     * Devuelve una frase que tiene el valor del pasaje y una pequeña descripcion que indica que pasajes abona con este boleto
+     * 
+     * @return string 
+     */
     public function obtenerDescripcion(){
         return $this->descripcion;
     }
