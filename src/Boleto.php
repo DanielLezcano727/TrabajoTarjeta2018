@@ -131,13 +131,14 @@ class Boleto implements BoletoInterface {
      *   Tipo de trasbordo
      */
 
-    private function tipoTrasbordo($precio){
+    public function tipoTrasbordo($precio){
         switch($precio){
         case (14.8/3):
             return "Trasbordo";
         case (7.4/3):
             return "Medio Trasbordo";
         }
+        return "";
     }
 
     /**
