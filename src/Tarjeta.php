@@ -17,6 +17,13 @@ class Tarjeta implements TarjetaInterface {
     protected $lineaAnterior;
     protected $fueTrasbordo;
 
+    /**
+     * Construye un objeto de tipo tarjeta e inicializa sus variables
+     * 
+     * @param TiempoInterface $tiempo
+     *   Tipo de tiempo que va a utilizar la tarjeta (utilizar tiempo falso solo en caso de testing)
+     */
+
     public function __construct (TiempoInterface $tiempo){
       static $ID = 0;
       $ID++;
@@ -31,6 +38,17 @@ class Tarjeta implements TarjetaInterface {
       $this->precioOriginal = $this->precio;
       $fueTrasbordo = false;
     }
+
+    /**
+     * Efectua la recarga de dinero en caso de que sea posible y establece la cantidad de pasjaes
+     * plus que se pueden abonar con esa recarga
+     * 
+     * @param int $monto
+     *   Cantidad de dinero que se quiere recargar
+     * 
+     * @return bool
+     *   Indica si se pudo recargar la tarjeta
+     */
 
     public function recargar($monto) {
       
@@ -71,7 +89,9 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve el saldo que le queda a la tarjeta.
      *
      * @return float
+     *   Saldo de la tarjeta
      */
+
     public function obtenerSaldo() {
       return $this->saldo;
     }
@@ -80,7 +100,9 @@ class Tarjeta implements TarjetaInterface {
      * Iguala el atributo linea a la linea del colectivo
      * 
      * @param string $linea
+     *   Linea del colectivo en la que se utiliza la tarjeta
      */
+
     public function establecerLinea($linea){
       $this->linea = $linea;
     }
@@ -88,8 +110,10 @@ class Tarjeta implements TarjetaInterface {
     /**
      * Devuelve el precio del pasaje que se va a abonar
      * 
-     * @return int 
+     * @return int
+     *   Precio del pasaje
      */
+
     public function obtenerPrecio() {
       return $this->precio;
     }
@@ -98,7 +122,9 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve la cantidad de plus que se van a abonar en el proximo pasaje
      * 
      * @return int
+     *   Cantidad de pasajes plus
      */
+
     public function obtenerCantPlus(){
       return $this->cantPlus;
     }    
@@ -107,7 +133,9 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve el identificador de la tarjeta
      * 
      * @return int
+     *   ID de la tarjeta
      */
+    
     public function obtenerID(){
       return $this->id;
     }
@@ -115,6 +143,7 @@ class Tarjeta implements TarjetaInterface {
     /**
      * Indica que la cantidad de pasajes plus que se van a abonar es 0
      */
+
     public function reestablecerPlus(){
       $this->plusAbonados = 0;
     }
@@ -123,7 +152,9 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve la cantidad de plus que se deben pagar en el proximo pasaje
      * 
      * @return int
+     *   Cantidad de plus abonados
      */
+
     public function obtenerPlusAbonados(){
       return $this->plusAbonados;
     }
@@ -131,6 +162,7 @@ class Tarjeta implements TarjetaInterface {
     /**
      * Desactiva la posibilidad de abonar un trasbordo
      */
+
     public function noContarTrasbordos(){
       $this->contarTrasbordos = false;
     }
@@ -142,7 +174,9 @@ class Tarjeta implements TarjetaInterface {
      * Tambien verifica si el pasaje que se va a pagar es un trasbordo
      * 
      * @return bool
+     *   indica si se ha podido pagar el pasaje
      */
+
     public function pagarPasaje(){
       
       $this->esTrasbordo();
@@ -169,7 +203,9 @@ class Tarjeta implements TarjetaInterface {
      * @param int $segundos
      * 
      * @return bool
+     *   Indica si se pudo avanzar el tiempo
      */
+
     public function avanzarTiempo($segundos){
       if($this->tiempo instanceof TiempoFalso){
           $this->tiempo->avanzar($segundos);
@@ -181,6 +217,7 @@ class Tarjeta implements TarjetaInterface {
     /**
      * Verifica si el pasaje a pagar es un trasbordo. Si es un trasbordo, cambia el precio del pasaje.
      */
+
     protected function esTrasbordo(){
       if($this->fueTrasbordo || $this->plusAbonados != 0){
         $this->fueTrasbordo = false;
@@ -210,6 +247,7 @@ class Tarjeta implements TarjetaInterface {
     /**
      * Establece el precio al precio normal de un pasaje (14.8)
      */
+
     public function reestablecerPrecio(){
       $this->precio = $this->precioOriginal;
     }
@@ -218,7 +256,9 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve el dia en el que se abona un pasaje
      * 
      * @return string
+     *   Dia
      */
+
     protected function dia(){
       return date("l",$this->tiempo->time());
     }
@@ -227,6 +267,7 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve la hora del dia en minutos
      * 
      * @return int
+     *   Hora en minutos
      */
     protected function horaEnMinutos(){
       return $this->tiempo->time() / 60;
@@ -236,6 +277,7 @@ class Tarjeta implements TarjetaInterface {
      * Devuelve la hora del dia en formato 24h
      * 
      * @return int
+     *   Hora
      */
     protected function hora(){
       return (int) date("H", $this->tiempo->time());
