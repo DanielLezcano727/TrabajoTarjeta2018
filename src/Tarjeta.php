@@ -230,7 +230,7 @@ class Tarjeta implements TarjetaInterface {
         $this->fueTrasbordo = false;
         return;
       }
-      if(isset($this->linea) && isset($this->lineaAnterior) && $this->lineaAnterior == $this->linea){
+      if($this->verificarLinea()){
         return;
       }
       $limitacionHora = 60;
@@ -242,15 +242,26 @@ class Tarjeta implements TarjetaInterface {
         case "Sunday":
           $limitacionHora = 90;
       }
-      if($this->hora() >= 22 || $this->hora() <= 6){
+      if($this->verificarHora()){
         $limitacionHora = 90;
       }
-      if($this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3){
+      if($this->verificarTrasbordo($limitacionHora)){
         $this->precio /= 3;
-       $this->fueTrasbordo = true;
+        $this->fueTrasbordo = true;
       }
     }
 
+    private function verificarTrasbordo($limitacionHora){
+      return $this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3;
+    }
+
+    private function verificarLinea(){
+      return isset($this->linea) && isset($this->lineaAnterior) && $this->lineaAnterior == $this->linea;
+    }
+
+    private function verificarHora(){
+      return $this->hora() >= 22 || $this->hora() <= 6;
+    }
     /**
      * Establece el precio al precio normal de un pasaje (14.8)
      */
