@@ -13,6 +13,7 @@ class Boleto implements BoletoInterface {
     protected $saldo;
     protected $id;
     protected $descripcion;
+    protected $valor;
 
 
 
@@ -33,12 +34,30 @@ class Boleto implements BoletoInterface {
         $this->fecha = date("d/m/Y H:i:s",$tiempo->time());
         
         $this->descripcion = $this->establecerDescripcion($tarjeta->obtenerCantPlus(), $tarjeta->obtenerPlusAbonados(), $tarjeta);
-
+        
         $tarjeta->reestablecerPrecio();
     }
 
+    /**
+     * Devuelve la descripcion del boleto indicando que precio se esta pagando por el pasaje
+     * y a que se debe ese precio.
+     * 
+     * @param int $cantPlus
+     *   Cantidad de plus que se estan utilzando
+     * @param int $plusAbonados
+     *   Cantidad de pasajes plus que se estan pagando
+     * @param TarjetaInterface $tarjeta
+     *   Objeto tarjeta con la que se pago el pasaje
+     * 
+     * @return string
+     *   Descripcion del pasaje
+     * 
+     */
+
     private function establecerDescripcion($cantPlus, $plusAbonados, $tarjeta){
-        
+
+        $this->valor = 0;
+
         switch($cantPlus){
         case 1:
             return "$0 Viaje Plus";
@@ -59,8 +78,20 @@ class Boleto implements BoletoInterface {
         
         $tarjeta->reestablecerPlus();
 
-        return "$" . ($tarjeta->obtenerPrecio() + 14.8 * $plusAbonados) . $abona;
+        $this->valor = $tarjeta->obtenerPrecio() + 14.8 * $plusAbonados;
+
+        return "$" . $this->valor . $abona;
     }
+
+    /**
+     * Indica el tipo de tarjeta que se esta utilizando
+     * 
+     * @param TarjetaInterface $tarjeta
+     *   Objeto tarjeta con el que se pago el pasaje
+     * 
+     * @return string
+     *   Tipo de tarjeta
+     */
 
     private function establecerTipo($tarjeta){
         switch($tarjeta->obtenerPrecio()){
@@ -80,6 +111,16 @@ class Boleto implements BoletoInterface {
         }
     }
 
+    /**
+     * Verifica que tipo de trasbordo se esta pagando
+     * 
+     * @param int $precio
+     *   Precio del pasaje
+     * 
+     * @return string
+     *   Tipo de trasbordo
+     */
+
     private function tipoTrasbordo($precio){
         switch($precio){
         case (14.8/3):
@@ -90,18 +131,20 @@ class Boleto implements BoletoInterface {
     }
 
     /**
-     * Devuelve el tarjeta->obtenerPrecio() del boleto.
+     * Devuelve el precio del boleto.
      *
      * @return int
+     *   Precio del boleto
      */
     public function obtenerValor() {
-        return $this->tarjeta->obtenerPrecio();
+        return $this->valor;
     }
 
     /**
      * Devuelve un objeto que respresenta el colectivo donde se viajó.
      *
      * @return ColectivoInterface
+     *   Colectivo en el que se realizo el viaje
      */
     public function obtenerColectivo() {
         return $this->colectivo;
@@ -111,6 +154,7 @@ class Boleto implements BoletoInterface {
      * Devuelve la fecha en la cual se pago el pasaje
      * 
      * @return string
+     *   Fecha en la que se abono el pasaje
      */
     public function obtenerFecha() {
         return $this->fecha;
@@ -120,6 +164,7 @@ class Boleto implements BoletoInterface {
      * Devuelve el tipo del pasaje (Medio Boleto, Franquicia completa, normal)
      * 
      * @return string
+     *   Tipo de boleto
      */
     public function obtenerTipo(){
         return $this->tipo;
@@ -129,6 +174,7 @@ class Boleto implements BoletoInterface {
      * Devuelve la linea del colectivo en la que viajo el pasajero.
      * 
      * @return string
+     *   Linea del colectivo
      */
     public function obtenerLinea(){
         return $this->linea;
@@ -138,6 +184,7 @@ class Boleto implements BoletoInterface {
      * Devuelve la cantidad de dinero total abonado con el pasaje
      * 
      * @return int
+     *   Precio abonado con el pasaje
      */
     public function obtenerTotalAbonado(){
         return $this->total;
@@ -147,6 +194,7 @@ class Boleto implements BoletoInterface {
      * Devuelve el saldo restante de la tarjeta con la que se pago el pasaje
      * 
      * @return int
+     *   Saldo restante de la tarjeta
      */
     public function obtenerSaldo(){
         return $this->saldo;
@@ -156,6 +204,7 @@ class Boleto implements BoletoInterface {
      * Devuelve el id de la tarjeta con la que se abono el pasaje
      * 
      * @return int
+     *   Id de la tarjeta
      */
     public function obtenerID(){
         return $this->id;
@@ -165,6 +214,7 @@ class Boleto implements BoletoInterface {
      * Devuelve una frase que tiene el valor del pasaje y una pequeña descripcion que indica que pasajes abona con este boleto
      * 
      * @return string 
+     *   Descripcion del boleto
      */
     public function obtenerDescripcion(){
         return $this->descripcion;
