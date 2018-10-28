@@ -79,5 +79,17 @@ class BoletoTest extends TestCase {
         
         $this->assertEquals($boleto->obtenerDescripcion(),"$0 Ultimo Plus");
     }
+
+    public function testTipoTrasbordo(){
+        $tarjeta = new FranquiciaCompleta(new Tiempo());
+        $colectivo = new Colectivo(null, "", null);
+        $boleto = new Boleto($colectivo, $tarjeta, new Tiempo());
+        $this->assertEquals($boleto->tipoTrasbordo(11),"");
+        $this->assertEquals($boleto->tipoTrasbordo(132),"");
+        $this->assertEquals($boleto->tipoTrasbordo(14.8/3),"Trasbordo");
+        $this->assertEquals($boleto->tipoTrasbordo(7.4/3),"Medio Trasbordo");
+        $this->assertEquals($boleto->tipoTrasbordo(10.4),"");
+        $this->assertEquals($boleto->tipoTrasbordo(11.8),"");
+    }
 }
 
