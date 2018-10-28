@@ -11,6 +11,7 @@ class Tarjeta implements TarjetaInterface {
     protected $tiempo;
     protected $dia;
     protected $minutos;
+    protected $hora;
     protected $precioOriginal;
     protected $contarTrasbordos;
     protected $linea;
@@ -51,29 +52,15 @@ class Tarjeta implements TarjetaInterface {
      */
 
     public function recargar($monto) {
-      
-      $carga = true;
-      
-      $saldoAux = $this->saldo;
-      switch($monto){
-        case 10:
-        case 20:
-        case 30:
-        case 50:
-        case 100:
-          $this->saldo+=$monto;
-          break;
-        case 510.15:
-          $this->saldo+=$monto + 81.93;
-          break;
-        case 962.59:
-          $this->saldo+=$monto + 221.58;        
-          break;
-        default:
-          $carga = false;
+      $monto = $this->recargaValida($monto);
+
+      if($monto == 0){
+        return false;
       }
 
-      if($carga && $this->cantPlus != 0){
+      $this->saldo += $monto;
+
+      if($this->cantPlus != 0){
         $this->plusAbonados = $this->cantPlus;
         if($this->saldo > 0){
           $this->cantPlus = 0;
@@ -82,9 +69,29 @@ class Tarjeta implements TarjetaInterface {
         }
       }
 
-      return $carga;
+      return true;
     }
     
+    private function recargaValida($monto){
+      switch($monto){
+        case 10:
+        case 20:
+        case 30:
+        case 50:
+        case 100:
+          break;
+        case 510.15:
+          $monto += 81.93;
+          break;
+        case 962.59:
+          $monto += 221.58;        
+          break;
+        default:
+          $monto = 0;
+      }
+      return $monto;
+    }
+
     /**
      * Devuelve el saldo que le queda a la tarjeta.
      *
