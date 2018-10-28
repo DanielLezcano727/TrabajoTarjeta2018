@@ -15,7 +15,17 @@ class Boleto implements BoletoInterface {
     protected $descripcion;
     protected $valor;
 
-
+    /**
+     * Construye un objeto de tipo Boleto, guarda los datos que necesita el boleto y en caso de que se haya utilizado un trasbordo
+     * se encarga de reestablecer el precio de la tarjeta.
+     * 
+     * @param ColectivoInterface $colectivo
+     *   Colectivo en el que se realizo el viaje
+     * @param TarjetaInterface $tarjeta
+     *   Tarjeta con la que se pago el pasaje
+     * @param TiempoInterface $tiempo
+     *   Tipo de tiempo utilizado (utilizar solo cuando se realice testing)
+     */
 
     public function __construct($colectivo, $tarjeta, TiempoInterface $tiempo) {
         $this->colectivo = $colectivo;
