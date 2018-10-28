@@ -72,6 +72,16 @@ class Tarjeta implements TarjetaInterface {
       return true;
     }
     
+    /**
+     * Verifica si una recarga puede ser valida y devuelve el valor de la recarga. En caso que no sea valida devuelve 0 como valor de la recarga
+     * 
+     * @param float $monto
+     *   Monto de la recarga
+     * 
+     * @return float
+     *   Monto de la recarga
+     */
+
     private function recargaValida($monto){
       switch($monto){
         case 10:
@@ -251,13 +261,37 @@ class Tarjeta implements TarjetaInterface {
       }
     }
 
+    /**
+     * Evalua si el pasaje cumple con las condiciones para ser trasbordo
+     * 
+     * @param int $limitacionHora
+     *   Cantidad de tiempo que dura el trasbordo
+     * 
+     * @return bool
+     *   Indica si el pasaje es trasbordo 
+     */
+
     private function verificarTrasbordo($limitacionHora){
       return $this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3;
     }
 
+    /**
+     * Verifica si la linea del viaje anterior es la misma que la del viaje que se esta pagando ahora
+     * 
+     * @return bool
+     *   Indica si las lineas son diferentes
+     */
+
     private function verificarLinea(){
       return isset($this->linea) && isset($this->lineaAnterior) && $this->lineaAnterior == $this->linea;
     }
+
+    /**
+     * Verifica si la hora del pasaje se encuentra entre los momentos que el trasbordo dura 50% mas tiempo
+     * 
+     * @return bool
+     *   Indica si el pasaje se paga dentro del rango 22 a 6 am
+     */
 
     private function verificarHora(){
       return $this->hora() >= 22 || $this->hora() <= 6;
