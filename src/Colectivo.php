@@ -2,7 +2,7 @@
 
 namespace TrabajoTarjeta;
 
-class Colectivo implements ColectivoInterface{
+class Colectivo implements ColectivoInterface {
     protected $linea;
     protected $numero;
     protected $empresa;
@@ -18,7 +18,7 @@ class Colectivo implements ColectivoInterface{
      *   Empresa del colectivo 
      */
 
-    public function __construct ($numero, $linea, $empresa){
+    public function __construct($numero, $linea, $empresa) {
         $this->linea = $linea;
         $this->numero = $numero;
         $this->empresa = $empresa;
@@ -30,7 +30,7 @@ class Colectivo implements ColectivoInterface{
      * @return string
      *   Linea del colectivo
      */
-    public function linea(){
+    public function linea() {
         return $this->linea;
     }
 
@@ -40,7 +40,7 @@ class Colectivo implements ColectivoInterface{
      * @return string
      *   Empresa del colectivo
      */
-    public function empresa(){
+    public function empresa() {
         return $this->empresa;
     }
 
@@ -50,7 +50,7 @@ class Colectivo implements ColectivoInterface{
      * @return int
      *   Numero del colectivo
      */
-    public function numero(){
+    public function numero() {
         return $this->numero;
     }
 
@@ -65,11 +65,11 @@ class Colectivo implements ColectivoInterface{
      * @return BoletoInterface|FALSE
      *   Boleto generado por el pago | FALSE
      */
-    public function pagarCon(TarjetaInterface $tarjeta){
+    public function pagarCon(TarjetaInterface $tarjeta) {
         $tarjeta->establecerLinea($this->linea);
-        if($tarjeta->pagarPasaje()){
-            return new Boleto($this,$tarjeta, new Tiempo());
-        }else{
+        if ($tarjeta->pagarPasaje()) {
+            return new Boleto($this, $tarjeta, new Tiempo());
+        }else {
             return false;
         }
         

@@ -25,7 +25,7 @@ class Tarjeta implements TarjetaInterface {
      *   Tipo de tiempo que va a utilizar la tarjeta (utilizar tiempo falso solo en caso de testing)
      */
 
-    public function __construct (TiempoInterface $tiempo){
+    public function __construct(TiempoInterface $tiempo) {
       static $ID = 0;
       $ID++;
       $this->saldo = 0;
@@ -35,9 +35,9 @@ class Tarjeta implements TarjetaInterface {
       $this->plusAbonados = 0;
       $this->tiempo = $tiempo;
       $this->minutos = -10000;
-      $this->contarTrasbordos = true;
+      $this->contarTrasbordos = TRUE;
       $this->precioOriginal = $this->precio;
-      $fueTrasbordo = false;
+      $fueTrasbordo = FALSE;
     }
 
     /**
@@ -54,22 +54,22 @@ class Tarjeta implements TarjetaInterface {
     public function recargar($monto) {
       $monto = $this->recargaValida($monto);
 
-      if($monto == 0){
+      if ($monto == 0) {
         return false;
       }
 
       $this->saldo += $monto;
 
-      if($this->cantPlus != 0){
+      if ($this->cantPlus != 0) {
         $this->plusAbonados = $this->cantPlus;
-        if($this->saldo > 0){
+        if ($this->saldo > 0) {
           $this->cantPlus = 0;
         }elseif ($this->saldo >= -$this->precio) {
           $this->cantPlus = 1;
         }
       }
 
-      return true;
+      return TRUE;
     }
     
     /**
@@ -84,20 +84,20 @@ class Tarjeta implements TarjetaInterface {
 
     private function recargaValida($monto){
       switch($monto){
-        case 10:
-        case 20:
-        case 30:
-        case 50:
-        case 100:
-          break;
-        case 510.15:
-          $monto += 81.93;
-          break;
-        case 962.59:
-          $monto += 221.58;        
-          break;
-        default:
-          $monto = 0;
+      case 10:
+      case 20:
+      case 30:
+      case 50:
+      case 100:
+        break;
+      case 510.15:
+        $monto += 81.93;
+        break;
+      case 962.59:
+        $monto += 221.58;        
+        break;
+      default:
+        $monto = 0;
       }
       return $monto;
     }
@@ -120,7 +120,7 @@ class Tarjeta implements TarjetaInterface {
      *   Linea del colectivo en la que se utiliza la tarjeta
      */
 
-    public function establecerLinea($linea){
+    public function establecerLinea($linea) {
       $this->linea = $linea;
     }
     
@@ -142,7 +142,7 @@ class Tarjeta implements TarjetaInterface {
      *   Cantidad de pasajes plus
      */
 
-    public function obtenerCantPlus(){
+    public function obtenerCantPlus() {
       return $this->cantPlus;
     }    
     
@@ -153,7 +153,7 @@ class Tarjeta implements TarjetaInterface {
      *   ID de la tarjeta
      */
     
-    public function obtenerID(){
+    public function obtenerID() {
       return $this->id;
     }
 
@@ -161,7 +161,7 @@ class Tarjeta implements TarjetaInterface {
      * Indica que la cantidad de pasajes plus que se van a abonar es 0
      */
 
-    public function reestablecerPlus(){
+    public function reestablecerPlus() {
       $this->plusAbonados = 0;
     }
 
@@ -172,7 +172,7 @@ class Tarjeta implements TarjetaInterface {
      *   Cantidad de plus abonados
      */
 
-    public function obtenerPlusAbonados(){
+    public function obtenerPlusAbonados() {
       return $this->plusAbonados;
     }
 
@@ -180,7 +180,7 @@ class Tarjeta implements TarjetaInterface {
      * Desactiva la posibilidad de abonar un trasbordo
      */
 
-    public function noContarTrasbordos(){
+    public function noContarTrasbordos() {
       $this->contarTrasbordos = false;
     }
 
@@ -194,24 +194,24 @@ class Tarjeta implements TarjetaInterface {
      *   indica si se ha podido pagar el pasaje
      */
 
-    public function pagarPasaje(){
+    public function pagarPasaje() {
       
       $this->esTrasbordo();
 
-      if($this->saldo >= (-$this->precio)){
-        $this->saldo = (float)number_format($this->saldo - $this->precio,2);
-        if($this->saldo < 0){
+      if ($this->saldo >= (-$this->precio)) {
+        $this->saldo = (float) number_format($this->saldo - $this->precio, 2);
+        if ($this->saldo < 0) {
           $this->cantPlus++;
         }
         $this->minutos = $this->horaEnMinutos();
         $this->dia = $this->dia();
         $this->hora = (int) date("H", $this->tiempo->time());
         $this->lineaAnterior = $this->linea;
-        return true;
+        return TRUE;
       }
       
 
-      return false;
+      return FALSE;
     }
 
     /**
@@ -223,12 +223,12 @@ class Tarjeta implements TarjetaInterface {
      *   Indica si se pudo avanzar el tiempo
      */
 
-    public function avanzarTiempo($segundos){
-      if($this->tiempo instanceof TiempoFalso){
+    public function avanzarTiempo($segundos) {
+      if ($this->tiempo instanceof TiempoFalso) {
           $this->tiempo->avanzar($segundos);
-          return true;
+          return TRUE;
       }
-      return false;
+      return FALSE;
     }
 
     /**
@@ -237,7 +237,7 @@ class Tarjeta implements TarjetaInterface {
 
     protected function esTrasbordo(){
       if($this->fueTrasbordo || $this->plusAbonados != 0){
-        $this->fueTrasbordo = false;
+        $this->fueTrasbordo = FALSE;
         return;
       }
       if($this->verificarLinea()){
@@ -245,19 +245,19 @@ class Tarjeta implements TarjetaInterface {
       }
       $limitacionHora = 60;
       switch($this->dia()){
-        case "Saturday":
-          if($this->hora() < 14){
-            break;
-          }
-        case "Sunday":
-          $limitacionHora = 90;
+      case "Saturday":
+        if($this->hora() < 14){
+          break;
+        }
+      case "Sunday":
+        $limitacionHora = 90;
       }
       if($this->verificarHora()){
         $limitacionHora = 90;
       }
       if($this->verificarTrasbordo($limitacionHora)){
         $this->precio /= 3;
-        $this->fueTrasbordo = true;
+        $this->fueTrasbordo = TRUE;
       }
     }
 
@@ -271,8 +271,8 @@ class Tarjeta implements TarjetaInterface {
      *   Indica si el pasaje es trasbordo 
      */
 
-    private function verificarTrasbordo($limitacionHora){
-      return $this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio/3;
+    private function verificarTrasbordo($limitacionHora) {
+      return $this->contarTrasbordos && $this->horaEnMinutos() - $this->minutos < $limitacionHora && $this->saldo >= $this->precio / 3;
     }
 
     /**
@@ -282,7 +282,7 @@ class Tarjeta implements TarjetaInterface {
      *   Indica si las lineas son diferentes
      */
 
-    private function verificarLinea(){
+    private function verificarLinea() {
       return isset($this->linea) && isset($this->lineaAnterior) && $this->lineaAnterior == $this->linea;
     }
 
@@ -293,14 +293,14 @@ class Tarjeta implements TarjetaInterface {
      *   Indica si el pasaje se paga dentro del rango 22 a 6 am
      */
 
-    private function verificarHora(){
+    private function verificarHora() {
       return $this->hora() >= 22 || $this->hora() <= 6;
     }
     /**
      * Establece el precio al precio normal de un pasaje (14.8)
      */
 
-    public function reestablecerPrecio(){
+    public function reestablecerPrecio() {
       $this->precio = $this->precioOriginal;
     }
 
@@ -311,8 +311,8 @@ class Tarjeta implements TarjetaInterface {
      *   Dia
      */
 
-    protected function dia(){
-      return date("l",$this->tiempo->time());
+    protected function dia() {
+      return date("l", $this->tiempo->time());
     }
 
     /**
@@ -321,7 +321,7 @@ class Tarjeta implements TarjetaInterface {
      * @return int
      *   Hora en minutos
      */
-    protected function horaEnMinutos(){
+    protected function horaEnMinutos() {
       return $this->tiempo->time() / 60;
     }
 
@@ -331,7 +331,7 @@ class Tarjeta implements TarjetaInterface {
      * @return int
      *   Hora
      */
-    protected function hora(){
+    protected function hora() {
       return (int) date("H", $this->tiempo->time());
     }
 }

@@ -41,7 +41,7 @@ class Boleto implements BoletoInterface {
         
         $this->id = $tarjeta->obtenerID();
         
-        $this->fecha = date("d/m/Y H:i:s",$tiempo->time());
+        $this->fecha = date("d/m/Y H:i:s", $tiempo->time());
         
         $this->descripcion = $this->establecerDescripcion($tarjeta->obtenerCantPlus(), $tarjeta->obtenerPlusAbonados(), $tarjeta);
         
@@ -64,11 +64,11 @@ class Boleto implements BoletoInterface {
      * 
      */
 
-    private function establecerDescripcion($cantPlus, $plusAbonados, $tarjeta){
+    private function establecerDescripcion($cantPlus, $plusAbonados, $tarjeta) {
 
         $this->valor = 0;
 
-        switch($cantPlus){
+        switch ($cantPlus) {
         case 1:
             return "$0 Viaje Plus";
         case 2:
@@ -77,7 +77,7 @@ class Boleto implements BoletoInterface {
         
         $abona = "";
         
-        switch($plusAbonados){
+        switch ($plusAbonados) {
         case 1:
             $abona = " Abona un Viaje Plus";
             break;
@@ -103,8 +103,8 @@ class Boleto implements BoletoInterface {
      *   Tipo de tarjeta
      */
 
-    private function establecerTipo($tarjeta){
-        switch($tarjeta->obtenerPrecio()){
+    private function establecerTipo($tarjeta) {
+        switch ($tarjeta->obtenerPrecio()) {
         case 14.80:
             $this->tipo = "Normal";
             break;
@@ -131,11 +131,11 @@ class Boleto implements BoletoInterface {
      *   Tipo de trasbordo
      */
 
-    public function tipoTrasbordo($precio){
-        switch($precio){
-        case (14.8/3):
+    public function tipoTrasbordo($precio) {
+        switch ($precio) {
+        case (14.8 / 3):
             return "Trasbordo";
-        case (7.4/3):
+        case (7.4 / 3):
             return "Medio Trasbordo";
         }
         return "";
@@ -177,7 +177,7 @@ class Boleto implements BoletoInterface {
      * @return string
      *   Tipo de boleto
      */
-    public function obtenerTipo(){
+    public function obtenerTipo() {
         return $this->tipo;
     }
 
@@ -187,7 +187,7 @@ class Boleto implements BoletoInterface {
      * @return string
      *   Linea del colectivo
      */
-    public function obtenerLinea(){
+    public function obtenerLinea() {
         return $this->linea;
     }
 
@@ -197,7 +197,7 @@ class Boleto implements BoletoInterface {
      * @return int
      *   Precio abonado con el pasaje
      */
-    public function obtenerTotalAbonado(){
+    public function obtenerTotalAbonado() {
         return $this->total;
     }
 
@@ -207,7 +207,7 @@ class Boleto implements BoletoInterface {
      * @return int
      *   Saldo restante de la tarjeta
      */
-    public function obtenerSaldo(){
+    public function obtenerSaldo() {
         return $this->saldo;
     }
 
@@ -217,7 +217,7 @@ class Boleto implements BoletoInterface {
      * @return int
      *   Id de la tarjeta
      */
-    public function obtenerID(){
+    public function obtenerID() {
         return $this->id;
     }
 
@@ -227,7 +227,7 @@ class Boleto implements BoletoInterface {
      * @return string 
      *   Descripcion del boleto
      */
-    public function obtenerDescripcion(){
+    public function obtenerDescripcion() {
         return $this->descripcion;
     }
 
