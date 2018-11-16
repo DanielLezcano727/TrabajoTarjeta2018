@@ -18,11 +18,11 @@ class MedioBoleto extends Tarjeta {
      *   Tipo de la tarjeta. 0 -> Medio Boleto Universitario, en cualquier otro caso -> Medio Boleto Secundario
      */
 
-    public function __construct(TiempoInterface $tiempo, $tipo = 1){
+    public function __construct(TiempoInterface $tiempo, $tipo = 1) {
         parent::__construct($tiempo);
         $this->precio /= 2;
 
-        switch($tipo){
+        switch ($tipo) {
         case 0:
             $this->tipo = "Medio Boleto Universitario";
             break;
@@ -45,7 +45,7 @@ class MedioBoleto extends Tarjeta {
      *   Indica si pasaron los 5 minutos
      */
 
-    protected function pasaron5Minutos(){
+    protected function pasaron5Minutos() {
         return ($this->tiempo->time() - $this->tiempoAux) > 300;
     }
 
@@ -56,7 +56,7 @@ class MedioBoleto extends Tarjeta {
      *   Indica si se pudo pagar el pasaje
      */
 
-    protected function pasajeNormal(){
+    protected function pasajeNormal() {
         $this->precio *= 2;
         $aux = parent::pagarPasaje();
         $this->precio /= 2;
@@ -70,7 +70,7 @@ class MedioBoleto extends Tarjeta {
      *   Indica si la franquicia es universitaria
      */
 
-    protected function esUniversitario(){
+    protected function esUniversitario() {
         return $this->tipo == "Medio Boleto Universitario";
     }
 
@@ -81,7 +81,7 @@ class MedioBoleto extends Tarjeta {
      *   Tipo de la tarjeta
      */
 
-    public function tipoTarjeta(){
+    public function tipoTarjeta() {
         return $this->tipo;
     }
 
@@ -93,11 +93,11 @@ class MedioBoleto extends Tarjeta {
      *   Verifica si se utilizaron los dos viajes en el dia
      */
 
-    private function dosViajes(){
-        if($this->tiempo->time() - $this->tiempoAux > 86400){
+    private function dosViajes() {
+        if ($this->tiempo->time() - $this->tiempoAux > 86400) {
             $this->usos = 0;
         }
-        if($this->usos == 2){
+        if ($this->usos == 2) {
             return true;
         }
         return false;
@@ -110,24 +110,24 @@ class MedioBoleto extends Tarjeta {
      *   Indica si se pudo pagar el pasaje
      */
 
-    public function pagarPasaje(){
-        if($this->obtenerSaldo() < 7.4){
+    public function pagarPasaje() {
+        if ($this->obtenerSaldo() < 7.4) {
             return $this->pasajeNormal();
         }
         
-        if($this->esUniversitario()){
-            if($this->dosViajes()){
+        if ($this->esUniversitario()) {
+            if ($this->dosViajes()) {
                 return $this->pasajeNormal();
             }
         }
 
-        if($this->pasaron5Minutos()){
+        if ($this->pasaron5Minutos()) {
             $this->tiempoAux = $this->tiempo->time();
-            if($this->esUniversitario()){
+            if ($this->esUniversitario()) {
                 $this->usos++;
             }
             return parent::pagarPasaje();
-        }else{
+        }else {
             return $this->pasajeNormal();
         }
 

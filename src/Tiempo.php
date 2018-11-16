@@ -10,7 +10,7 @@ class Tiempo implements TiempoInterface {
      * @return int
      *   Tiempo
      */
-    public function time(){
+    public function time() {
         return time();
     }
     
@@ -37,7 +37,7 @@ class TiempoFalso implements TiempoInterface {
      * @param int $segundos
      *   Segundos que se quiere avanzar el tiempo
      */
-    public function avanzar($segundos){
+    public function avanzar($segundos) {
         $this->tiempo += $segundos;
     }
 
@@ -47,7 +47,7 @@ class TiempoFalso implements TiempoInterface {
      * @return int
      *   Tiempo falso en segundos
      */
-    public function time(){
+    public function time() {
         return $this->tiempo;
     }
 }

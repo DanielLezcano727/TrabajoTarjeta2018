@@ -11,7 +11,7 @@ class FranquiciaCompleta extends Tarjeta {
      *   Tiempo que utiliza la tarjeta (utilizar tiempo falso solo en caso de testing)
      */
 
-    public function __construct(TiempoInterface $tiempo){
+    public function __construct(TiempoInterface $tiempo) {
         parent::__construct($tiempo);
         $this->precio = 0;
     }
@@ -24,7 +24,7 @@ class FranquiciaCompleta extends Tarjeta {
      * @return true
      *   Indica que el pasaje se ha podido pagar correctamente
      */
-    public function pagarPasaje(){
+    public function pagarPasaje() {
         return true;
     }
 }
