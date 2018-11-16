@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.org/DanielLezcano727/TrabajoTarjeta2018.svg?branch=master)](https://travis-ci.org/DanielLezcano727/TrabajoTarjeta2018)
+Travis:       [![Build Status](https://travis-ci.org/DanielLezcano727/TrabajoTarjeta2018.svg?branch=master)](https://travis-ci.org/DanielLezcano727/TrabajoTarjeta2018)
 
-[![Coverage Status](https://coveralls.io/repos/github/DanielLezcano727/TrabajoTarjeta2018/badge.svg?branch=master)](https://coveralls.io/github/DanielLezcano727/TrabajoTarjeta2018?branch=master)
+Coveralls:    [![Coverage Status](https://coveralls.io/repos/github/DanielLezcano727/TrabajoTarjeta2018/badge.svg?branch=master)](https://coveralls.io/github/DanielLezcano727/TrabajoTarjeta2018?branch=master)
+
+Scrutinizer: [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/DanielLezcano727/TrabajoTarjeta2018/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/DanielLezcano727/TrabajoTarjeta2018/?branch=master)
 
 Daniel Lezcano - Micaela Siles
 
